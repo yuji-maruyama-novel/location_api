@@ -1,0 +1,21 @@
+type Location {
+  id: ID!
+  name: String!
+  address: String!
+  visited_at: String!
+}
+
+type Query {
+  locations: [Location!]!
+  years: [Int!]
+}
+
+input NewLocation {
+  name: String!
+  address: String!
+  visited_at: String!
+}
+
+type Mutation {
+  createLocation(input: NewLocation!): Location!
+}

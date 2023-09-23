@@ -1,0 +1,7 @@
+.env*
+.vscode
+logs
+tmp
+pgadmin_data
+postgres_data
+.DS_Store

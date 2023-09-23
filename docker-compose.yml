@@ -1,0 +1,56 @@
+version: "3.8" # composeファイルのバージョン
+services:
+  location_api: # サービス名
+    container_name: location_api
+    build: # ビルドに使うDockerファイルのパス
+      context: .
+      dockerfile: ./build/Dockerfile
+      target: local
+    ports:
+      - 3004:3004
+    volumes: # マウントディレクトリ
+      - .:/go/src
+    tty: true # コンテナの永続化
+    environment:
+      - TZ=Asia/Tokyo
+    networks:
+      - record_network
+
+  location_db:
+    image: postgres:latest
+    container_name: location_db
+    environment:
+      POSTGRES_DB: location_app
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      TZ: "Asia/Tokyo"
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    depends_on: #依存関係
+      - location_api
+    networks:
+      - record_network
+
+  location_pgadmin:
+    image: dpage/pgadmin4
+    container_name: location_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - location_db
+    volumes:
+      - ./pgadmin_data:/var/lib/pgadmin
+    networks:
+      - record_network
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  record_network:

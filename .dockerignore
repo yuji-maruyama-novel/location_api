@@ -1,0 +1,6 @@
+.vscode
+build
+.dockerignore
+docker-compose.yml
+pgadmin_data
+postgres_data
